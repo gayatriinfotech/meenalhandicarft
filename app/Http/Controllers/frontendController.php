@@ -67,7 +67,8 @@ class frontendController extends Controller
             $email = session()->get('email');
             $cart = DB::table('carts')
                 ->join('products', 'carts.product_id', '=', 'products.id')
-                ->select('*', 'products.id as pid', 'carts.id as cid')
+                ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
+                ->select('*', 'products.id as pid', 'carts.id as cid', 'stocks.id as sid')
                 ->where('carts.user_ip', '=', $email)
                 ->get();
         } else {
@@ -78,7 +79,8 @@ class frontendController extends Controller
 
             $cart = DB::table('carts')
                 ->join('products', 'carts.product_id', '=', 'products.id')
-                ->select('*', 'products.id as pid', 'carts.id as cid')
+                ->leftJoin('stocks', 'products.id', '=', 'stocks.product_id')
+                ->select('*', 'products.id as pid', 'carts.id as cid', 'stocks.id as sid')
                 ->where('carts.user_ip', '=', $clientIP)
                 ->get();
         }
@@ -464,15 +466,38 @@ class frontendController extends Controller
 
     public function addtowishlist($id)
     {
-        $product = product::find($id);
         $userid = session()->get('userid');
-        $add = new wishlist([
-            'user_id' => $userid,
-            'product_id' => $product->id,
-        ]);
-        $add->save();
+        $wishlist = wishlist::where([
+            ['user_id', '=', $userid],
+            ['product_id', '=', $id],
+        ])->get();
+
+        if (count($wishlist) > 0)
+        {
+            return back()->with('warning', 'Already exist in your wishlist!');
+        }
+        else {
+            $add = new wishlist([
+                'user_id' => $userid,
+                'product_id' => $id,
+            ]);
+            $add->save();
+        }
+        // $product = product::find($id);
+        // $add = new wishlist([
+        //     'user_id' => $userid,
+        //     'product_id' => $product->id,
+        // ]);
+        // $add->save();
         // echo $userid;
         return back()->with('success', 'Product Added To Wishlist');
+    }
+
+    public function removewishlist($id)
+    {
+        $wishlist = wishlist::find($id);
+        $wishlist->delete();
+        return back();
     }
 
     public function contact(Request $req)

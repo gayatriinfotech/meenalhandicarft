@@ -12,6 +12,7 @@
                                     <div class="d-flex justify-content-between align-items-center mb-5">
                                         <h3 class="fw-bold mb-0 text-black">Shopping Cart</h3>
                                         @php
+                                        $stocks = 0;
                                         $subtotal = 0;
                                         $count = count($cart);
                                         @endphp
@@ -21,6 +22,7 @@
                                     @if($count <= 0) <h2 class="text-center">Empty Cart</h2>
                                         @else
                                         @foreach($cart as $c)
+                                        
                                         <div class="row mb-4 d-flex justify-content-between align-items-center">
                                             <div class="col-md-2 col-lg-2 col-xl-2">
                                                 @php
@@ -29,7 +31,7 @@
                                                 @endphp
                                                 @foreach($images as $image)
                                                 @if($counts == 0)
-                                                <img src="images/products/{{$image}}" class="img-fluid rounded-3" alt="diya">
+                                                <a href=""></a><img src="images/products/{{$image}}" class="img-fluid rounded-3" alt="diya">
                                                 @endif
                                                 @php $counts++; @endphp
                                                 @endforeach
@@ -37,6 +39,10 @@
                                             <div class="col-md-3 col-lg-3 col-xl-3">
                                                 <h6 class="text-muted">{{$c->product_name}}</h6>
                                                 <h6 class="text-black mb-0">Color : Green</h6>
+                                                @if($c->stocks == 0)
+                                                @php $stocks = 1; @endphp
+                                                <p class="text-center text-danger">Out of stocks</p>
+                                                @endif
                                             </div>
                                             <input type="hidden" class="cid" value="{{$c->cid}}">
                                             <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
@@ -110,9 +116,11 @@
                                         <h5 class="text-uppercase">Total price</h5>
                                         <h5>{{$subtotal}}₹</h5>
                                     </div>
-
+                                    @if($stocks == 0)
                                     <a href="checkout" class="btn btn-dark btn-block btn-lg" data-mdb-ripple-color="dark">Checkout</a>
-
+                                    @else
+                                    <a href="checkout" class="btn btn-dark btn-block btn-lg disabled" data-mdb-ripple-color="dark">Checkout</a>
+                                    @endif
                                 </div>
                             </div>
                         </div>

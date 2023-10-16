@@ -52,7 +52,7 @@
                 toast: !0,
                 position: "top-end",
                 showConfirmButton: !1,
-                timer: 3e3,
+                timer: 2e3,
                 timerProgressBar: !0,
                 didOpen: e => {
                     e.addEventListener("mouseenter", Swal.stopTimer), e.addEventListener("mouseleave", Swal.resumeTimer)
