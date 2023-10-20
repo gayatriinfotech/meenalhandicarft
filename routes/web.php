@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Route::get('/demo', function () {
-//     return view('frontend/contact');
+//     return view('frontend/order');
 // });
 
 // backend routes 
@@ -33,7 +33,10 @@ Route::get('adminlogin', [backendController::class, 'adminlogin']);
 Route::post('/adminlogin', [backendController::class, 'adminloginPost']);
 Route::get('/adminlogout', [backendController::class, 'adminlogout']);
 Route::resource('inward', inwardController::class);
-Route::get('stock', [backendController::class, 'stock']);
+Route::get('stock', [backendController::class, 'stock'])->middleware('adminLoginCheck');
+Route::get('contactus', [backendController::class, 'contact'])->middleware('adminLoginCheck');
+Route::get('orders', [backendController::class, 'orders'])->middleware('adminLoginCheck');
+Route::get('subscribers', [backendController::class, 'subscribers'])->middleware('adminLoginCheck');
 
 // frontend routes 
 Route::get('/', [frontendController::class, 'index']);
@@ -61,3 +64,9 @@ Route::get('removewishlist/{id}', [frontendController::class, 'removewishlist'])
 Route::get('/contact', [frontendController::class, 'contact']);
 Route::post('/contact', [frontendController::class, 'contactPost']);
 Route::post('/subscribe', [frontendController::class, 'subscribe']);
+Route::post('/placeorder', [frontendController::class, 'placeorder'])->middleware('userlogincheck');
+Route::get('/myorders', [frontendController::class, 'myorders'])->middleware('userlogincheck');
+
+
+
+Route::get('/demo', [frontendController::class, 'demo'])->middleware('userlogincheck');

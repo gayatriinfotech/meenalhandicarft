@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meenal Handicraft</title>
+    <link rel="icon" href="{{asset('frontend/image/favicon.png')}}" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -114,9 +115,9 @@
             </div>
             <div class="col-md-4 p-4 mt-2 ">
                 <i class="fas fa-heart"></i>
-                <a href="/wishlist" id="icon2">Wishlist</a>&nbsp &nbsp
-                <i class="fa-solid fa-user"></i>
-                <a href="/profile" id="icon2">Profile</a>&nbsp &nbsp
+                <a href="/wishlist" id="icon2">Wishlist</a>&nbsp
+                <img src="/frontend/image/order-icon.png" width="25px" alt="">
+                <a href="/myorders" id="icon2">My Orders</a>&nbsp
                 <a href="/cart" class="text-decoration-none text-dark"><i class="fa-solid fa-cart-shopping"></i> {{session('cart')}}</a>
             </div>
         </div>
@@ -148,7 +149,7 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         @if(session('userid'))
                         <li class="nav-item">
-                            <a class="nav-link text-dark" aria-current="page">{{session('username')}} &nbsp;&nbsp;&nbsp;|</a>
+                            <a href="/profile" class="nav-link text-dark" aria-current="page"><i class="fa fa-user"></i> {{session('username')}} &nbsp;&nbsp;&nbsp;|</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" aria-current="page" href="/logout">Logout</a>

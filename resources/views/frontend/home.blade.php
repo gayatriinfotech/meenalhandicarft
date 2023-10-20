@@ -145,7 +145,7 @@
 
                 <div class="desc">
                     <h3><a href="{{route('singleproduct', $p->pid)}}">{{ Illuminate\Support\Str::limit($p->product_name, 21) }}</a></h3>
-                    <p class="price"><span>${{$p->wholesale_price}}</span></p>
+                    <p class="price"><span>{{$p->wholesale_price}}₹</span></p>
                 </div>
             </div>
         </div>

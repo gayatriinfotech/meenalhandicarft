@@ -10,7 +10,7 @@
                 <i class="fa-regular fa-user" id="icon-form"></i><br><br>
                 <input type="text" class="name" name="email" placeholder="Email"><br><br>
                 <input type="password" class="name" name="password" placeholder="Password"><br>
-
+                <input type="hidden" name="user" value="customer">
                 <button class="but-form rounded-3" type="submit">Login</button>
                 <a style="text-decoration: none;color: white;cursor: pointer;" href="/register" class="but-form rounded-3">Sign Up</a>
 

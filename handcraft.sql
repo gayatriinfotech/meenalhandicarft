@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 16, 2023 at 08:31 AM
+-- Generation Time: Oct 20, 2023 at 07:50 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.19
 
@@ -45,6 +45,38 @@ INSERT INTO `adminlogins` (`id`, `username`, `password`, `created_at`, `updated_
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `bill_details`
+--
+
+CREATE TABLE `bill_details` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `order_id` bigint(20) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `number` bigint(20) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `pincode` int(11) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `state` varchar(255) NOT NULL,
+  `country` varchar(255) NOT NULL,
+  `landmark` varchar(255) NOT NULL,
+  `product_status` varchar(255) NOT NULL,
+  `delivery_status` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `bill_details`
+--
+
+INSERT INTO `bill_details` (`id`, `order_id`, `name`, `number`, `email`, `address`, `pincode`, `city`, `state`, `country`, `landmark`, `product_status`, `delivery_status`, `created_at`, `updated_at`) VALUES
+(1, 1810202370379772, 'saikrishna vidap', 7057115277, 'sai.vidap7777@gmail.com', '917, new paccha peth ashok chowk solapur', 413006, 'Solapur', 'Maharashtra', 'India', 'kala clinic', 'Pending', 'Pending', '2023-10-18 10:06:12', '2023-10-18 10:06:12'),
+(2, 1810202347313581, 'saikrishna vidap', 7057115277, 'sai.vidap7777@gmail.com', '917, new paccha peth ashok chowk solapur', 413006, 'Solapur', 'Maharashtra', 'India', 'kala clinic', 'Pending', 'Pending', '2023-10-18 10:06:12', '2023-10-18 10:06:12');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `carts`
 --
 
@@ -52,6 +84,7 @@ CREATE TABLE `carts` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_ip` varchar(255) DEFAULT NULL,
   `product_id` bigint(20) NOT NULL,
+  `pprice` bigint(20) NOT NULL,
   `quantity` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -61,8 +94,9 @@ CREATE TABLE `carts` (
 -- Dumping data for table `carts`
 --
 
-INSERT INTO `carts` (`id`, `user_ip`, `product_id`, `quantity`, `created_at`, `updated_at`) VALUES
-(1, 'maheshyangandul@gmail.com', 24, 2, '2023-10-14 12:29:02', '2023-10-15 02:40:12');
+INSERT INTO `carts` (`id`, `user_ip`, `product_id`, `pprice`, `quantity`, `created_at`, `updated_at`) VALUES
+(4, 'sai.vidap7777@gmail.com', 19, 2697, 1, '2023-10-18 10:07:49', '2023-10-18 10:07:49'),
+(5, 'sai.vidap7777@gmail.com', 21, 169, 1, '2023-10-18 10:08:22', '2023-10-18 10:08:22');
 
 -- --------------------------------------------------------
 
@@ -219,7 +253,40 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (14, '2023_10_12_172625_create_wishlists_table', 3),
 (15, '2023_10_12_181639_create_contacts_table', 4),
 (16, '2023_10_14_105454_create_subscribers_table', 5),
-(17, '2023_10_14_112214_create_order_details_table', 6);
+(17, '2023_10_14_112214_create_order_details_table', 6),
+(18, '2023_10_16_105540_create_order_details_table', 7),
+(19, '2023_10_16_105553_create_bill_details_table', 7);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_details`
+--
+
+CREATE TABLE `order_details` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `order_id` bigint(20) NOT NULL,
+  `user_id` varchar(255) NOT NULL,
+  `product_id` bigint(20) NOT NULL,
+  `quantity` bigint(20) NOT NULL,
+  `price` bigint(20) NOT NULL,
+  `shipping` float NOT NULL,
+  `total` bigint(20) NOT NULL,
+  `payment_mode` varchar(50) NOT NULL,
+  `delivery_status` varchar(255) NOT NULL,
+  `date` varchar(50) NOT NULL,
+  `time` varchar(50) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_details`
+--
+
+INSERT INTO `order_details` (`id`, `order_id`, `user_id`, `product_id`, `quantity`, `price`, `shipping`, `total`, `payment_mode`, `delivery_status`, `date`, `time`, `created_at`, `updated_at`) VALUES
+(1, 1810202370379772, 'sai.vidap7777@gmail.com', 21, 3, 169, 0, 507, 'cash', 'Pending', '18-10-2023', '15:36:12', '2023-10-18 10:06:12', '2023-10-18 10:06:12'),
+(2, 1810202347313581, 'sai.vidap7777@gmail.com', 23, 2, 18925, 0, 37850, 'cash', 'Pending', '18-10-2023', '15:36:12', '2023-10-18 10:06:12', '2023-10-18 10:06:12');
 
 -- --------------------------------------------------------
 
@@ -289,7 +356,7 @@ INSERT INTO `products` (`id`, `category_id`, `subcate_id`, `sku_id`, `product_na
 (2, 1, 4, 'SKUID-2', 'Delicate Round Engagement Ring Box', 'Ring-Box-1.png,Ring-Box-2.png,Ring-Box-3.png,Ring-Box-4.png', 'The sleek round design, coupled with its premium materials, creates a stunning presentation for your treasured ring. Every aspect of this box, from its smooth exterior to its plush velvet interior, has been thoughtfully designed to enhance the magic and significance of your special moment.', 2093.00, 1200.00, 1256.00, 'Walnut', '.', '.', '.', '.', '.', '.', '2023-10-06 12:09:03', '2023-10-06 12:09:03'),
 (3, 1, 4, 'SKUID-3', 'Ring Bearer Box', 'Ring-Bearer-Box-1.png,Ring-Bearer-Box-2.png,Ring-Bearer-Box-3.png,Ring-Bearer-Box-4.png', 'A lovely personalized Walnut Wedding Ring Box with custom words is a great gift idea for lovers, bride&groom, bridesmaids, a friend, or yourself! This box can be used to store jewelry, mini cards or special mementos.', 1907.00, 900.00, 953.00, '.', '.', '.', '.', '.', '.', '.', '2023-10-06 12:22:38', '2023-10-06 12:22:38'),
 (4, 1, 5, 'SKUID-32', 'Luxury Eucalyptus Wedding Planner Book', 'Wedding-Planner-Book-1.png,Wedding-Planner-Book-2.png,Wedding-Planner-Book-3.png,Wedding-Planner-Book-4.png', 'This new version of our bestselling \'My Wedding Planner\' now includes an 18-month undated calendar, three sticker sheets, protective gold corners, a stencil sheet to help with your table plans, a pocket at the end for all your loose bits of paper and lots more updated content!', 3154.00, 3100.00, 3154.00, '.', '.', '.', '.', '.', '.', '.', '2023-10-07 01:46:00', '2023-10-07 01:46:00'),
-(5, 1, 5, 'SKUID-32', 'Engagement Love Lock', 'Love-Padlock-1.png,Love-Padlock-2.png,Love-Padlock-3.png,Love-Padlock-4.png', 'Each love lock comes with its own ribbon-tied key, wrapped in white tissue in an exclusive Carriage Trade gift box. Made from metal alloy, the padlock measures 4.5cm in diameter. Height 6cm or 10cm, depending on style chosen.', 2317.00, 2500.00, 2317.00, '.', '.', '.', '.', '.', '.', '.', '2023-10-07 01:50:40', '2023-10-07 01:50:40'),
+(5, 1, 5, 'SKUID-32', 'Engagement Love Lock', 'Love-Padlock-1.png,Love-Padlock-2.png,Love-Padlock-3.png,Love-Padlock-4.png', 'Each love lock comes with its own ribbon-tied key, wrapped in white tissue in an exclusive Carriage Trade gift box. Made from metal alloy, the padlock measures 4.5cm in diameter. Height 6cm or 10cm, depending on style chosen.', 2317.00, 2200.00, 2317.00, '.', '.', '.', '.', '.', '.', '.', '2023-10-07 01:50:40', '2023-10-17 18:38:16'),
 (6, 1, 5, 'SKUID-w3', 'Couple Bracelet', 'Couple-Bracelet-1.png,Couple-Bracelet-2.png,Couple-Bracelet-3.png,Couple-Bracelet-4.png', 'Matching Couples Bracelets Set of 2 amazing, unique Leather and Stainless Steel cuff bracelets.', 6533.00, 4500.00, 4899.00, '.', '.', '.', '.', '.', '.', '.', '2023-10-07 01:55:05', '2023-10-07 01:55:05'),
 (7, 1, 5, 'SKUID-31', 'Jewelry Box', 'Jewelry-Box-1.png,Jewelry-Box-2.png,Jewelry-Box-3.png,Jewelry-Box-4.png', 'Handcrafted with meticulous attention to detail, our wooden jewelry box gift box is made from high-quality wood, ensuring its longevity and durability. The smooth surface and expertly crafted floral design evoke a sense of grace and beauty, making it a perfect accessory for storing precious jewelry and cherished mementos.', 1401.00, 1200.00, 1261.00, '.', '.', '.', '.', '.', '.', '.', '2023-10-07 02:06:59', '2023-10-07 02:17:44'),
 (8, 1, 6, 'SKUID-342', 'Blue Mountain Wedding Invitation', 'Blue-1.png,Blue-2.png,Blue-3.png,Blue-4.png', 'Our Blue Mountain Wedding Invitation Suite is thoughtfully curated to infuse the spirit of the mountains into every aspect of your special day, ensuring an unforgettable celebration.', 1253.00, 600.00, 626.00, '.', '.', '.', '.', '.', '.', '.', '2023-10-07 02:28:09', '2023-10-07 02:28:09'),
@@ -306,9 +373,9 @@ INSERT INTO `products` (`id`, `category_id`, `subcate_id`, `sku_id`, `product_na
 (20, 3, 10, 'SKUID-2131', 'On the Go ! Blender', 'Blender-1.jpg,Blender-2.jpg,Blender-3.jpg,Blender-4.jpg', 'Four generations [touch screen] [5C 2000 mAh power battery] [magnetic induction safety switch]', 1978.00, 1800.00, 1978.00, '.', '.', '.', '.', '.', '.', '.', '2023-10-07 05:51:24', '2023-10-08 05:42:28'),
 (21, 3, 10, 'SKUID-77272', 'Wooden Chopping Board', 'chopper-1.jpg,chopper-2.jpg,chopper-3.jpg,chopper-4.jpg', 'Wood Chopping/Cutting Board is made of wood so it lasts longer and is gentle on your knives as well. This board is durable and lightweight. An environmentally friendly option for cutting your fruits and vegetables. It is easy to clean. It is the perfect size for cutting fruits, vegetables and other food items.', 199.00, 150.00, 169.00, '.', '.', '.', '.', '.', '.', '.', '2023-10-07 05:54:06', '2023-10-08 05:43:18'),
 (22, 3, 11, 'SKUID-2772', 'Nightstand with Drawer', 'Drawer-1.jpg,Drawer-2.jpg,Drawer-3.jpg,Drawer-4.jpg', 'The Nightstand with Drawer is a sleek and stylish addition to any bedroom decor. Crafted with care, this walnut colored floating nightstand offers both functionality and aesthetics.', 16087.00, 7500.00, 8044.00, '.', '.', '.', '.', '.', '.', '.', '2023-10-07 05:59:52', '2023-10-08 05:44:33'),
-(23, 3, 11, 'SKUID-28282', 'Live Edge Coffee Table', 'Table-1.jpg,Table-2.jpg,Table-3.jpg,Table-4.jpg', 'This handmade coffee table will add more useful space to your home with its first-class solid wood structure, impeccable workmanship and years of use. This coffee table has a lifetime warranty.', 37851.00, 35000.00, 18925.00, '.', '.', '.', '.', '.', '.', '.', '2023-10-07 06:04:22', '2023-10-08 05:44:57'),
+(23, 3, 11, 'SKUID-28282', 'Live Edge Coffee Table', 'Table-1.jpg,Table-2.jpg,Table-3.jpg,Table-4.jpg', 'This handmade coffee table will add more useful space to your home with its first-class solid wood structure, impeccable workmanship and years of use. This coffee table has a lifetime warranty.', 37851.00, 17000.00, 18925.00, '.', '.', '.', '.', '.', '.', '.', '2023-10-07 06:04:22', '2023-10-17 18:40:38'),
 (24, 3, 12, 'SKUID-32221', 'Modern Mirror for Bathroom', 'Mirror-1.jpg,Mirror-2.jpg,Mirror-3.jpg,Mirror-4.jpg', '.', 4732.00, 2600.00, 2839.00, '.', '.', '.', '.', '.', '.', '.', '2023-10-07 06:09:35', '2023-10-08 05:45:25'),
-(25, 3, 12, 'SKUID-77222', 'Metal Large Wall Clock', 'Clock-1.jpg,Clock-2.jpg,Clock-3.jpg,Clock-4.jpg', '.', 8586.00, 8000.00, 4293.00, '.', '.', '.', '.', '.', '.', '.', '2023-10-07 06:12:27', '2023-10-08 05:45:59');
+(25, 3, 12, 'SKUID-77222', 'Metal Large Wall Clock', 'Clock-1.jpg,Clock-2.jpg,Clock-3.jpg,Clock-4.jpg', '.', 8586.00, 7800.00, 8000.00, '.', '.', '.', '.', '.', '.', '.', '2023-10-07 06:12:27', '2023-10-17 18:41:31');
 
 -- --------------------------------------------------------
 
@@ -341,7 +408,10 @@ CREATE TABLE `profile_tbls` (
 
 INSERT INTO `profile_tbls` (`id`, `firstname`, `lastname`, `mobileno`, `email`, `password`, `gender`, `pincode`, `address`, `city`, `state`, `country`, `landmark`, `profile`, `created_at`, `updated_at`) VALUES
 (1, 'Youknow', 'Me', '8282828282', 'user@gmail.com', 'user12345', 'Male', '413005', 'Daji Peth', 'Solapur', 'Maharashtra', 'India', 'Balaji Mandir', NULL, '2023-10-01 02:15:53', '2023-10-10 07:08:50'),
-(2, 'Mahesh', 'Yangandul', '9145706236', 'maheshyangandul@gmail.com', 'mahesh123', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2023-10-13 04:45:07', '2023-10-13 04:45:07');
+(2, 'Mahesh', 'Yangandul', '9145706236', 'maheshyangandul@gmail.com', 'mahesh123', 'Male', '413005', 'Daji Peth', 'Solapur', 'Maharashtra', 'India', 'Balaji Mandir', NULL, '2023-10-13 04:45:07', '2023-10-17 05:22:00'),
+(3, 'Youknow', 'Me', '2323232323', 'youknowme6798@gmail.com', 'youknowme', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2023-10-18 05:08:57', '2023-10-18 05:08:57'),
+(4, 'You', 'Knowme', '3333333333', 'youknowme6798@gmail.com', 'youknowme6798', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2023-10-18 05:11:11', '2023-10-18 05:11:11'),
+(5, 'Saikrishna', 'Vidap', '7057115277', 'sai.vidap7777@gmail.com', 'prabhas123', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2023-10-18 10:03:50', '2023-10-18 10:03:50');
 
 -- --------------------------------------------------------
 
@@ -366,7 +436,9 @@ CREATE TABLE `registers` (
 
 INSERT INTO `registers` (`id`, `email`, `firstname`, `lastname`, `mobileno`, `password`, `created_at`, `updated_at`) VALUES
 (1, 'user@gmail.com', 'user', 'user', '8282828282', 'user12345', '2023-10-01 02:15:53', '2023-10-01 02:15:53'),
-(2, 'maheshyangandul@gmail.com', 'Mahesh', 'Yangandul', '9145706236', 'mahesh123', '2023-10-13 04:45:07', '2023-10-13 04:45:07');
+(2, 'maheshyangandul@gmail.com', 'Mahesh', 'Yangandul', '9145706236', 'mahesh123', '2023-10-13 04:45:07', '2023-10-13 04:45:07'),
+(4, 'youknowme6798@gmail.com', 'You', 'Knowme', '3333333333', 'youknowme6798', '2023-10-18 05:11:11', '2023-10-18 05:11:11'),
+(5, 'sai.vidap7777@gmail.com', 'Saikrishna', 'Vidap', '7057115277', 'prabhas123', '2023-10-18 10:03:50', '2023-10-18 10:03:50');
 
 -- --------------------------------------------------------
 
@@ -396,21 +468,21 @@ INSERT INTO `stocks` (`id`, `product_id`, `stocks`, `created_at`, `updated_at`) 
 (7, '7', '50', '2023-10-14 01:04:18', '2023-10-14 01:04:18'),
 (8, '8', '70', '2023-10-14 01:04:30', '2023-10-14 01:04:30'),
 (9, '9', '50', '2023-10-14 01:04:40', '2023-10-14 01:04:40'),
-(10, '10', '80', '2023-10-14 01:04:51', '2023-10-14 01:06:03'),
+(10, '10', '79', '2023-10-14 01:04:51', '2023-10-17 18:05:01'),
 (11, '11', '120', '2023-10-14 01:05:03', '2023-10-14 01:06:37'),
 (12, '12', '90', '2023-10-14 01:07:26', '2023-10-14 01:07:26'),
 (13, '13', '30', '2023-10-14 01:09:59', '2023-10-14 01:09:59'),
 (14, '14', '60', '2023-10-14 01:10:09', '2023-10-14 01:10:09'),
 (15, '15', '90', '2023-10-14 01:10:24', '2023-10-14 01:10:24'),
 (16, '16', '70', '2023-10-14 01:10:39', '2023-10-14 01:10:39'),
-(17, '17', '50', '2023-10-14 01:11:05', '2023-10-14 01:11:05'),
-(18, '19', '40', '2023-10-14 01:11:35', '2023-10-14 01:11:35'),
+(17, '17', '46', '2023-10-14 01:11:05', '2023-10-18 07:27:35'),
+(18, '19', '39', '2023-10-14 01:11:35', '2023-10-18 06:51:47'),
 (19, '20', '0', '2023-10-14 01:12:07', '2023-10-14 12:23:09'),
-(20, '21', '80', '2023-10-14 01:12:39', '2023-10-14 01:12:39'),
-(21, '22', '70', '2023-10-14 01:27:38', '2023-10-14 01:27:38'),
-(22, '23', '60', '2023-10-14 01:27:51', '2023-10-14 01:27:51'),
-(23, '24', '120', '2023-10-14 01:28:01', '2023-10-14 01:28:19'),
-(24, '25', '60', '2023-10-14 01:28:28', '2023-10-14 01:28:28');
+(20, '21', '74', '2023-10-14 01:12:39', '2023-10-18 10:06:12'),
+(21, '22', '68', '2023-10-14 01:27:38', '2023-10-18 07:00:33'),
+(22, '23', '57', '2023-10-14 01:27:51', '2023-10-18 10:06:12'),
+(23, '24', '116', '2023-10-14 01:28:01', '2023-10-18 06:48:22'),
+(24, '25', '57', '2023-10-14 01:28:28', '2023-10-18 07:49:10');
 
 -- --------------------------------------------------------
 
@@ -468,7 +540,7 @@ CREATE TABLE `wishlists` (
 --
 
 INSERT INTO `wishlists` (`id`, `user_id`, `product_id`, `created_at`, `updated_at`) VALUES
-(1, 2, 23, '2023-10-13 07:09:36', '2023-10-13 07:09:36');
+(5, 2, 20, '2023-10-17 05:19:28', '2023-10-17 05:19:28');
 
 --
 -- Indexes for dumped tables
@@ -478,6 +550,12 @@ INSERT INTO `wishlists` (`id`, `user_id`, `product_id`, `created_at`, `updated_a
 -- Indexes for table `adminlogins`
 --
 ALTER TABLE `adminlogins`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `bill_details`
+--
+ALTER TABLE `bill_details`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -515,6 +593,12 @@ ALTER TABLE `inwards`
 -- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `order_details`
+--
+ALTER TABLE `order_details`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -585,10 +669,16 @@ ALTER TABLE `adminlogins`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `bill_details`
+--
+ALTER TABLE `bill_details`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -618,7 +708,13 @@ ALTER TABLE `inwards`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `order_details`
+--
+ALTER TABLE `order_details`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -636,13 +732,13 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `profile_tbls`
 --
 ALTER TABLE `profile_tbls`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `registers`
 --
 ALTER TABLE `registers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `stocks`
@@ -666,7 +762,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `wishlists`
 --
 ALTER TABLE `wishlists`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

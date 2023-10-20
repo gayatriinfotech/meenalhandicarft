@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\bill_details;
 use App\Models\cart;
 use App\Models\category;
 use App\Models\contact;
+use App\Models\order_details;
 use App\Models\product;
 use App\Models\profile_tbl;
 use App\Models\register;
+use App\Models\stock;
 use App\Models\subscribers;
 use App\Models\wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use PDF;
+use Illuminate\Support\Carbon;
 
 class frontendController extends Controller
 {
@@ -95,6 +101,7 @@ class frontendController extends Controller
 
     public function addtocart($id, Request $req)
     {
+        $pprice = product::find($id);
         $clientIP = $req->getClientIp(true);
         if (session('email')) {
             $user = session()->get('email');
@@ -112,6 +119,7 @@ class frontendController extends Controller
                 $cart = new cart([
                     'user_ip' => $user,
                     'product_id' => $id,
+                    'pprice' => $pprice->wholesale_price,
                     'quantity' => 1,
                 ]);
 
@@ -132,6 +140,7 @@ class frontendController extends Controller
                 $cart = new cart([
                     'user_ip' => $clientIP,
                     'product_id' => $id,
+                    'pprice' => $pprice->wholesale_price,
                     'quantity' => 1,
                 ]);
 
@@ -472,11 +481,9 @@ class frontendController extends Controller
             ['product_id', '=', $id],
         ])->get();
 
-        if (count($wishlist) > 0)
-        {
+        if (count($wishlist) > 0) {
             return back()->with('warning', 'Already exist in your wishlist!');
-        }
-        else {
+        } else {
             $add = new wishlist([
                 'user_id' => $userid,
                 'product_id' => $id,
@@ -589,5 +596,139 @@ class frontendController extends Controller
             // echo "else";
             return view('frontend/searchresult', compact('product', 'searchingdata'));
         }
+    }
+
+    public function placeorder(Request $req)
+    {
+        $req->validate([
+            'name' => 'required|min:6',
+            'email' => 'required|email',
+            'number' => 'required|digits:10|numeric',
+            'address' => 'required|min:6',
+            'landmark' => 'required',
+            'pincode' => 'required|digits:6|numeric',
+            'country' => 'required',
+            'state' => 'required',
+            'city' => 'required',
+        ]);
+        $shipping = 0;
+        $ship = 0;
+        $date = now()->day . now()->month . now()->year;
+        $order_id = $date . random_int(00000000, 99999999);
+        $carts = cart::where([
+            ['user_ip', '=', session()->get('email')]
+        ])->get();
+        $sendcarts = $carts;
+        // print_r($sendcarts);
+        // echo number_format(40/count($carts),2);
+        if ($req->get('subtotal') < 1000) {
+            $shipping = number_format(40 / count($carts), 2);
+            $ship = 40;
+        }
+        // exit();
+        foreach ($carts as $c) {
+            $date_time = Carbon::now()->toArray();
+            $order_id = $date . random_int(00000000, 99999999);
+            $data[$order_id] = [
+                'order_id' => $order_id,
+                'name' => $req->get('name'),
+                'number' => $req->get('number'),
+                'email' => $req->get('email'),
+                'address' => $req->get('address'),
+                'pincode' => $req->get('pincode'),
+                'city' => $req->get('city'),
+                'state' => $req->get('state'),
+                'landmark' => $req->get('landmark'),
+                'user_id' => session()->get('email'),
+                'product_id' => $c->product_id,
+                'quantity' => $c->quantity,
+                'price' => $c->pprice,
+                'total' => $c->quantity * $c->pprice,
+                'shipping' => $ship,
+                'date' => $date_time['day'] . '-' . $date_time['month'] . '-' . $date_time['year'],
+                'time' => $date_time['hour'] . ':' . $date_time['minute'] . ':' . $date_time['second'],
+            ];
+            $billDetails = new bill_details([
+                'order_id' => $order_id,
+                'name' => $req->get('name'),
+                'number' => $req->get('number'),
+                'email' => $req->get('email'),
+                'address' => $req->get('address'),
+                'pincode' => $req->get('pincode'),
+                'city' => $req->get('city'),
+                'state' => $req->get('state'),
+                'country' => $req->get('country'),
+                'landmark' => $req->get('landmark'),
+                'product_status' => "Pending",
+                'delivery_status' => "Pending",
+            ]);
+            if ($billDetails->save()) {
+                $orderDetails = new order_details([
+                    'order_id' => $order_id,
+                    'user_id' => session()->get('email'),
+                    'product_id' => $c->product_id,
+                    'quantity' => $c->quantity,
+                    'price' => $c->pprice,
+                    'shipping' => $shipping,
+                    'total' => $c->quantity * $c->pprice,
+                    'payment_mode' => 'cash',
+                    'delivery_status' => 'Pending',
+                    'date' => $date_time['day'] . '-' . $date_time['month'] . '-' . $date_time['year'],
+                    'time' => $date_time['hour'] . ':' . $date_time['minute'] . ':' . $date_time['second'],
+                ]);
+                $orderDetails->save();
+            }
+
+            $stock = stock::where([
+                ['product_id', '=', $c->product_id],
+            ])->first();
+            $stock->stocks = $stock->stocks - $c->quantity;
+            $stock->update();
+
+            $deletecart = cart::find($c->id);
+            $deletecart->delete();
+        }
+        $product = product::get();
+        $name = $req->get('name');
+        $userEmail['to'] = $req->get('email');
+        $pdf = PDF::loadView('frontend/invoice2', compact('data', 'product'));
+        Mail::send('frontend/ordermail', compact('name'), function ($msg) use ($userEmail, $pdf) {
+            $msg->to($userEmail['to'])
+                ->subject('Order Placed Successfully!')
+                ->attachData($pdf->output(), 'invoice.pdf');
+        });
+        return view('frontend/orderpage');
+    }
+
+    public function myorders(Request $req)
+    {
+        $clientIP = $req->getClientIp(true);
+        if (session('email')) {
+            $useremail = session()->get('email');
+            $getcart = cart::where([
+                ['user_ip', '=', $useremail],
+            ])->count();
+            session()->put('cart', $getcart);
+        } else {
+            $getcart = cart::where([
+                ['user_ip', '=', $clientIP],
+            ])->count();
+            session()->put('cart', $getcart);
+        }
+
+        $orders = DB::table('order_details')
+            ->join('bill_details', 'order_details.order_id', '=', 'bill_details.order_id')
+            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->where('order_details.user_id', '=', session()->get('email'))
+            ->select('*', 'order_details.id as oid', 'bill_details.id as bid', 'products.id as pid')
+            ->get();
+
+        return view('frontend/myorders', compact('orders'));
+    }
+
+    public function demo()
+    {
+        // $date_time = Carbon::now()->toArray();
+        // echo $d['month'];
     }
 }

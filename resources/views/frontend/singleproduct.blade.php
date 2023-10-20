@@ -47,20 +47,20 @@
                     </div>
 
                     <div class="product-price">
-                        <p class="last-price">Old Price: <span>{{$product->wholesale_price}}₹</span></p>
-                        <p class="new-price">New Price: <span>{{$product->wholesale_price}}₹ (5%)</span></p>
+                        <p class="last-price">Old Price: <span>{{$product->mrp}}₹</span></p>
+                        <p class="new-price">New Price: <span>{{$product->wholesale_price}}₹ <span style="color: #1ade00;">({{$product->mrp - $product->wholesale_price}}₹ off)</span></span></p>
                     </div>
 
                     <div class="product-detail">
                         <h3>about this item: </h3>
                         <p>{{$product->description}}</p>
-                        <ul>
+                        <!-- <ul>
                             <li>Color: <span>Black</span></li>
                             <li>Available: <span>in stock</span></li>
                             <li>Category: <span>Shoes</span></li>
                             <li>Shipping Area: <span>All over the world</span></li>
                             <li>Shipping Fee: <span>Free</span></li>
-                        </ul>
+                        </ul> -->
                     </div>
 
                     <div class="purchase-info">
@@ -78,7 +78,7 @@
                         <a href="/addtowishlist/{{$product->pid}}" type="button" style="background-color: black;" class="btn"><i class="fas fa-heart"></i></a>
                     </div>
 
-                    <div class="social-links">
+                    <!-- <div class="social-links">
                         <p>Share At: </p>
                         <a href="#">
                             <i class="fab fa-facebook-f"></i>
@@ -95,7 +95,7 @@
                         <a href="#">
                             <i class="fab fa-pinterest"></i>
                         </a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

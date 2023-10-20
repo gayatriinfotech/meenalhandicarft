@@ -35,6 +35,9 @@
                         @endif
                         @php $count++; @endphp
                         @endforeach
+                        @if($p->stocks == 0)
+                        <span class="product-ribbon product-ribbon-right product-ribbon--style-1 bg-red text-uppercase">Out of stock</span>
+                        @endif
                     </div>
                     <div class="block-body text-center">
                         <h3 class="heading heading-5 strong-600 text-capitalize">
@@ -47,11 +50,19 @@
                         </p>
                         <div class="product-buttons mt-4">
                             <div class="row align-items-center">
+                                @if($p->stocks == 0)
+                                <div class="col-8">
+                                    <a href="{{route('addtocart', $p->pid)}}" type="button" class="btn btn-block btn-warning btn-circle btn-icon-left disabled">
+                                        <i class="fa fa-shopping-cart"></i>Add to cart</a>
+                                    </a>
+                                </div>
+                                @else
                                 <div class="col-8">
                                     <a href="{{route('addtocart', $p->pid)}}" type="button" class="btn btn-block btn-warning btn-circle btn-icon-left">
                                         <i class="fa fa-shopping-cart"></i>Add to cart</a>
                                     </a>
                                 </div>
+                                @endif
                                 <div class="col-2">
                                     <a href="/removewishlist/{{$p->wid}}" type="button" class="btn-icon" data-toggle="tooltip" data-placement="top" title data-original-title="Favorite">
                                         remove

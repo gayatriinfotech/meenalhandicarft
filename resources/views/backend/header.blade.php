@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{{asset('frontend/images/logo/favicon.ico')}}" type="image/x-icon">
+    <link rel="icon" href="{{asset('frontend/image/favicon.png')}}" type="image/x-icon">
     <link rel="stylesheet" href="{{asset('assets/css/styles.min.css')}}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
@@ -177,19 +177,19 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/feedbacks" aria-expanded="false">
+                            <a class="sidebar-link" href="/orders" aria-expanded="false">
                                 <span>
                                     <i class="fa fa-dot-circle"></i>
                                 </span>
-                                <span class="hide-menu">Feedback</span>
+                                <span class="hide-menu">Orders</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/enquiries" aria-expanded="false">
+                            <a class="sidebar-link" href="/subscribers" aria-expanded="false">
                                 <span>
                                     <i class="fa fa-dot-circle"></i>
                                 </span>
-                                <span class="hide-menu">Enquiry</span>
+                                <span class="hide-menu">Subscribers</span>
                             </a>
                         </li>
 

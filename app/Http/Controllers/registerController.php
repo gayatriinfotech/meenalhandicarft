@@ -6,6 +6,7 @@ use App\Models\cart;
 use App\Models\profile_tbl;
 use App\Models\register;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class registerController extends Controller
 {
@@ -73,7 +74,13 @@ class registerController extends Controller
                         'mobileno' => $req->get('phoneno'),
                         'password' => $req->get('password'),
                     ]);
+                    $name = $req->get('fname');
+                    $userEmail['to'] = $req->get('email');
                     $profile->save();
+                    Mail::send('frontend/registermail', compact('name'), function($msg) use ($userEmail) {
+                        $msg->to($userEmail['to'])
+                            ->subject('Registered Successfully!');
+                    });
                     return redirect('login')->with('success', 'Register Successfully');
                 } else {
                     echo "Error";

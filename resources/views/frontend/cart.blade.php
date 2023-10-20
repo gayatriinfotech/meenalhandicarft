@@ -22,7 +22,7 @@
                                     @if($count <= 0) <h2 class="text-center">Empty Cart</h2>
                                         @else
                                         @foreach($cart as $c)
-                                        
+
                                         <div class="row mb-4 d-flex justify-content-between align-items-center">
                                             <div class="col-md-2 col-lg-2 col-xl-2">
                                                 @php
@@ -31,14 +31,15 @@
                                                 @endphp
                                                 @foreach($images as $image)
                                                 @if($counts == 0)
-                                                <a href=""></a><img src="images/products/{{$image}}" class="img-fluid rounded-3" alt="diya">
+                                                <a href="{{route('singleproduct', $c->pid)}}"><img src="images/products/{{$image}}" class="img-fluid rounded-3" alt="diya"></a>
                                                 @endif
                                                 @php $counts++; @endphp
                                                 @endforeach
                                             </div>
                                             <div class="col-md-3 col-lg-3 col-xl-3">
                                                 <h6 class="text-muted">{{$c->product_name}}</h6>
-                                                <h6 class="text-black mb-0">Color : Green</h6>
+                                                <h6 class="text-black mb-0">Color : Green</h6><br>
+                                                <h6 class="text-black mb-0">Price : {{$c->pprice}}₹</h6>
                                                 @if($c->stocks == 0)
                                                 @php $stocks = 1; @endphp
                                                 <p class="text-center text-danger">Out of stocks</p>
@@ -52,16 +53,18 @@
                                                 </button>
                                                 @endif
 
-                                                <input id="form1" id="qty" min="0" name="quantity" value="{{$c->quantity}}" type="number" class="form-control form-control-sm" />
+                                                <input id="form1" id="qty" name="quantity" value="{{$c->quantity}}" type="text" class="form-control form-control-sm" />
 
-                                                <button class="plus btn btn-link px-2" value="{{$c->cid}}">
-                                                    <i class="fas fa-plus"></i>
-                                                </button>
+                                                @if($c->quantity < $c->stocks)
+                                                    <button class="plus btn btn-link px-2" value="{{$c->cid}}">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                    @endif
 
                                             </div>
                                             <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                                                 @php
-                                                $total = $c->wholesale_price * $c->quantity;
+                                                $total = $c->pprice * $c->quantity;
                                                 $subtotal = $subtotal + $total;
                                                 @endphp
                                                 <h6 class="mb-0"> {{$total}}₹ </h6>
@@ -88,6 +91,16 @@
                                     <div class="d-flex justify-content-between mb-4">
                                         <h5 class="text-uppercase">items {{$count}}</h5>
                                         <h5>{{$subtotal}}₹</h5>
+                                    </div>
+                                    <hr class="my-4">
+                                    <div class="d-flex justify-content-between mb-4">
+                                        <h5 class="text-uppercase">Shipping</h5>
+                                        @if($subtotal < 1000)
+                                        @php $subtotal = $subtotal + 40; @endphp
+                                        <h5>40₹</h5>
+                                        @else
+                                        <h5>0₹</h5>
+                                        @endif
                                     </div>
 
                                     <!-- <h5 class="text-uppercase mb-3">Shipping</h5>
@@ -116,10 +129,17 @@
                                         <h5 class="text-uppercase">Total price</h5>
                                         <h5>{{$subtotal}}₹</h5>
                                     </div>
+                                    @if($count == 0)
+                                    <a href="checkout" class="btn btn-dark btn-block btn-lg disabled" data-mdb-ripple-color="dark">Checkout</a>
+
+                                    @else
                                     @if($stocks == 0)
                                     <a href="checkout" class="btn btn-dark btn-block btn-lg" data-mdb-ripple-color="dark">Checkout</a>
+
                                     @else
                                     <a href="checkout" class="btn btn-dark btn-block btn-lg disabled" data-mdb-ripple-color="dark">Checkout</a>
+                                    @endif
+
                                     @endif
                                 </div>
                             </div>

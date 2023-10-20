@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('user_ip');
             $table->bigInteger('product_id');
+            $table->bigInteger('pprice');
             $table->integer('quantity');
             $table->timestamps();
         });
